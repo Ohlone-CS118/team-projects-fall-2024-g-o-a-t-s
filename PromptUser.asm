@@ -5,6 +5,8 @@
 	
 .text
 
+.globl prompt_user
+
 prompt_user:
 	li $t0, 1		# min number
 	li $t1, 6		# max number
