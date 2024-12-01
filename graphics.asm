@@ -79,7 +79,7 @@ viagra_1:
     li $a0, 0          # Start column (x-coordinate)
     li $a1, 0          # Row (y-coordinate)
     li $a2, RED        # Color (RED)
-    li $a3, 128        # Length of the row
+    li $a3, 10        # Length of the row
     jal draw_row
 
     j end_program
