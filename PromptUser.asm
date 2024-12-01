@@ -16,7 +16,7 @@ prompt_user:
 	li $v0, 5		# read user input
 	syscall
 
-	blt $v0, $t0, error_message	# error message if input < 6
+	blt $v0, $t0, error_message	# error message if input < 1
 	bgt $v0, $t1, error_message	# error message if input > 6
 
 	jr $ra
