@@ -1,1 +1,7 @@
+.data
+
+
+.text
+
+.globl main:
 
