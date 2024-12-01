@@ -55,19 +55,22 @@ main:
     # Step 3: Read user input (integer)
     li $v0, 5                 # Syscall for read integer
     syscall                   # Read integer input
-    move $t0, $v0             # Move input to $t0 (selected_drug)
-
+    
+    li $t0, 1
+    li $t1, 6
+    
     # Step 4: Validate input (1-6)
-    blt $t0, 1, invalid_input_handler # If input < 1, invalid
-    bgt $t0, 6, invalid_input_handler # If input > 6, invalid
+    blt $v0, $t0, invalid_input_handler # If input < 1, invalid
+    bgt $v0, $t1, invalid_input_handler # If input > 6, invalid
+
 
     # Step 5: Select the corresponding drug prices array
-    beq $t0, 1, viagra
-    beq $t0, 2, lipitor
-    beq $t0, 3, ventolin
-    beq $t0, 4, lantus
-    beq $t0, 5, prozac
-    beq $t0, 6, xanax
+    beq $v0, 1, viagra_1
+    beq $v0, 2, lipitor_2
+    beq $v0, 3, ventolin_3
+    beq $v0, 4, lantus_4
+    beq $v0, 5, prozac_5
+    beq $v0, 6, xanax_6
 
 # Subroutines for each drug
 viagra_1:
