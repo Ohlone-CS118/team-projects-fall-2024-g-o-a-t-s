@@ -7,8 +7,6 @@ welcome: .asciiz "Hello! This program will show you the difference in drug price
 main:
 
 beginning:
-	beq $t0, -1, shutdown		# branch if the user enters -1
-	
 	move $v1, $sp			# stash the stack pointer because it gets messy in all the other files
 	move $fp, $v1			# set up the frame pointer
 	
@@ -29,7 +27,8 @@ beginning:
 	jal graphics			# call graphics
 	
 	jal prompt_user_loop		# call prompt_user_loop
-		
+	
+	bne $v0, 2, beginning		# jump to beginning
 		
 shutdown:
 	li $v0, 10			# exit safely

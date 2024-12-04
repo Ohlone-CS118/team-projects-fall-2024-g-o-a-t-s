@@ -26,7 +26,7 @@ prompt_user:
 	li $s0, 0		# reset $s0
 	li $s1, 0		# reset $s1
 
-	jr $ra
+	jr $ra			# return
 	
 error_message:
 	li $v0, 4		# print error message
