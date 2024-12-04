@@ -14,5 +14,12 @@ main:
 	
 	jal prompt_user
 	
+	move $a0, $v0
+	
+	li $v0, 1
+	syscall
+	
+	#jal graphics
+		
 	li $v0, 10
 	syscall
