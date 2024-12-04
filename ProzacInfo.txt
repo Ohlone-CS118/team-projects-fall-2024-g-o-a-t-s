@@ -1,0 +1,7 @@
+Here are the average prices per dose of the generic form of Prozac in these 6 countries:
+US: $0.25
+Canada: $0.23
+Germany: $0.62
+UK: $0.07
+Brazil: $0.30
+Mexico: $0.95
