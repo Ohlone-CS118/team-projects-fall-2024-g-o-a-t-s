@@ -5,24 +5,26 @@
 .data
 # Set display to:
 # Pixels width and height to 4x4
-# Display width and height to 512 x 512
+# Display width and height to 512 x 256
 # Base address = 0x10010000
-# This will make our screen width 128x128 (512/4 = 128)
-# 128 * 128 * 4 = 65,536 required bytes.
+# This will make our screen width 512/4 = 128 pixels (for width)
+# and the screen height is 256/4 = 64 pixels (for height)
+# 128 * 64 * 4 = 32,768 required bytes.
+
 
     # Screen information
-    .eqv PIXEL_SIZE 4          	# Each pixel is 4 bytes (ARGB format)
-    .eqv WIDTH 128              # Display width in pixels
-    .eqv HEIGHT 128             # Display height in pixels
+    .eqv PIXEL_SIZE 4          	# Each pixel is 4 bytes 
+    .eqv WIDTH 128              # Display width in pixels (512/4 = 128)
+    .eqv HEIGHT 64              # Display height in pixels (256/4 = 64)
     .eqv DISPLAY 0x10010000     # Base address for Bitmap Display
 
     # Colors
-    .eqv    RED     0x00FF0000  # Country 1
-    .eqv    GREEN   0x0034b818  # Country 2
-    .eqv    ORANGE  0x00e58e13  # Country 3
-    .eqv    BLUE    0x002085d0  # Country 4
-    .eqv    WHITE   0x00ffffff  # Country 5
-    .eqv    YELLOW  0x00FFFF00  # Country 6
+    .eqv    RED     0x00FF0000  # Country 1 - US -> RED
+    .eqv    GREEN   0x0034b818  # Country 2 - Canada -> GREEN
+    .eqv    ORANGE  0x00e58e13  # Country 3 - Germany -> ORANGE
+    .eqv    BLUE    0x002085d0  # Country 4 - UK -> BLUE
+    .eqv    WHITE   0x00ffffff  # Country 5 - Brazil -> WHITE
+    .eqv    YELLOW  0x00FFFF00  # Country 6 - Mexico -> YELLOW
     .eqv    BLACK   0x00000000  # Background color
 
     # Prompts and Messages
@@ -30,22 +32,15 @@
     invalid_input:   .asciiz "Invalid input. Please enter a number between 1 and 6.\n"
     header:          .asciiz "\nPrescription Cost Comparison:\n"
 
-    # Drug Prices (Scaled by 100 to handle decimal values)
-    # Each drug has six prices corresponding to six countries
-    # Format: Drug1: Country1, Country2, ..., Country6
-    viagra: 	.word 190, 467, 324, 51, 128, 202      # Drug 1 Prices
-    lipitor: 	.word 36, 15, 41, 9, 54, 67            # Drug 2 Prices
-    ventolin: 	.word 4043, 343, 1398, 365, 187, 604   # Drug 3 Prices
-    lantus: .word 6336, 955, 1395, 705, 982, 1696  # Drug 4 Prices
-    prozac: .word 25, 23, 62, 7, 30, 95            # Drug 5 Prices
-    xanax: .word 300, 500, 400, 200, 600, 700     # Drug 6 Prices
 
 .text
-.globl main
+.globl graphics
 
-main:
+graphics:
  
-
+    addi $sp, $sp, -4	        # make room for one word on the stack
+    sw $ra, 0($sp)		# store return address
+    move $fp, $sp		# set up frame pointer
 
     # Step 2: Display the selection prompt
     li $v0, 4                 # Syscall for print string
@@ -56,8 +51,8 @@ main:
     li $v0, 5                 # Syscall for read integer
     syscall                   # Read integer input
     
-    li $t0, 1
-    li $t1, 6
+    li $t0, 1		# min value
+    li $t1, 6		# max value
     
     # Step 4: Validate input (1-6)
     blt $v0, $t0, invalid_input_handler # If input < 1, invalid
@@ -75,39 +70,585 @@ main:
 # Subroutines for each drug
 viagra_1:
 
-# Step 1: Draw country 1 row: RED  -> 0x00FF0000
-    li $a0, 0          # Start column (x-coordinate)
-    li $a1, 0          # Row (y-coordinate)
-    li $a2, RED        # Color (RED)
-    li $a3, 10        # Length of the row
-    jal draw_row
 
-    j end_program
+#Country 1: US -> RED  	
+    li $t8, 4		# scaling factor 1/4
+    div $t2, $t2, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 7          # Row (y-coordinate)
+    li $a2, RED        # Color  
+    move $a3, $t2      # move t2 to a3
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 8          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 9          # Row (y-coordinate)
+    jal draw_row
+    
+# Country 2: Canada -> GREEN
+    div $t3, $t3, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 16          # Row (y-coordinate)
+    li $a2, GREEN        # Color 
+    move $a3, $t3	# move t3 to a3
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 17          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 18          # Row (y-coordinate)
+    jal draw_row    
+    
+# Country 3: Germany -> ORANGE
+    div $t4, $t4, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 25          # Row (y-coordinate)
+    li $a2, ORANGE        # Color 
+    move $a3, $t4	# move t4 to a3
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 26          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 27          # Row (y-coordinate)
+    jal draw_row        
+    
+# Country 4: UK -> BLUE
+    div $t5, $t5, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 34          # Row (y-coordinate)
+    li $a2, BLUE        # Color 
+    move $a3, $t5	# move t5 to a3
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 35          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 36          # Row (y-coordinate)
+    jal draw_row       
+    
+# Country 5: Brazil -> WHITE
+    div $t6, $t6, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 43          # Row (y-coordinate)
+    li $a2, WHITE        # Color 
+    move $a3, $t6	# move t6 to a3
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 44          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 45          # Row (y-coordinate)
+    jal draw_row      
+    
+# Country 6: Mexico -> YELLOW
+    div $t7, $t7, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 52          # Row (y-coordinate)
+    li $a2, YELLOW        # Color  
+    move $a3, $t7	# move t7 to a3
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 53          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 54          # Row (y-coordinate)
+    jal draw_row      
+
+    jr $ra
 
 lipitor_2:
-    la $t1, lipitor     # Load address of drug2_prices into $t1
-    jal draw_row        # Call subroutine to draw bar chart
-    j end_program
+#Country 1: US -> RED  
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 7          # Row (y-coordinate)
+    li $a2, RED        # Color 
+    move $a3, $t2	# move t2 to a3
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 8          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 9          # Row (y-coordinate)
+    jal draw_row
+    
+# Country 2: Canada -> GREEN
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 16          # Row (y-coordinate)
+    li $a2, GREEN        # Color 
+    move $a3, $t3	# move t3 to a3
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 17          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 18          # Row (y-coordinate)
+    jal draw_row    
+    
+# Country 3: Germany -> ORANGE
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 25          # Row (y-coordinate)
+    li $a2, ORANGE        # Color  
+    move $a3, $t4
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 26          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 27          # Row (y-coordinate)
+    jal draw_row        
+    
+# Country 4: UK -> BLUE
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 34          # Row (y-coordinate)
+    li $a2, BLUE        # Color  
+    move $a3, $t5
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 35          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 36          # Row (y-coordinate)
+    jal draw_row       
+    
+# Country 5: Brazil -> WHITE
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 43          # Row (y-coordinate)
+    li $a2, WHITE        # Color  
+    move $a3, $t6
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 44          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 45          # Row (y-coordinate)
+    jal draw_row      
+    
+# Country 6: Mexico -> YELLOW
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 52          # Row (y-coordinate)
+    li $a2, YELLOW        # Color  
+    move $a3, $t7
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 53          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 54          # Row (y-coordinate)
+    jal draw_row      
+
+    jr $ra
 
 ventolin_3:
-    la $t1, ventolin     # Load address of drug3_prices into $t1
-    jal draw_row        # Call subroutine to draw bar chart
-    j end_program
+# Country 1: US -> RED  
+    li $t8, 35
+    div $t2, $t2, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 7          # Row (y-coordinate)
+    li $a2, RED        # Color  
+    move $a3, $t2
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 8          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 9          # Row (y-coordinate)
+    jal draw_row
+    
+# Country 2: Canada -> GREEN
+    div $t3, $t3, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 16          # Row (y-coordinate)
+    li $a2, GREEN        # Color  
+    move $a3, $t3
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 17          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 18          # Row (y-coordinate)
+    jal draw_row    
+    
+# Country 3: Germany -> ORANGE
+    div $t4, $t4, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 25          # Row (y-coordinate)
+    li $a2, ORANGE        # Color  
+    move $a3, $t4
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 26          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 27          # Row (y-coordinate)
+    jal draw_row        
+    
+# Country 4: UK -> BLUE
+    div $t5, $t5, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 34          # Row (y-coordinate)
+    li $a2, BLUE        # Color  
+    move $a3, $t5
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 35          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 36          # Row (y-coordinate)
+    jal draw_row       
+    
+# Country 5: Brazil -> WHITE
+    div $t6, $t6, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 43          # Row (y-coordinate)
+    li $a2, WHITE        # Color  
+    move $a3, $t6
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 44          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 45          # Row (y-coordinate)
+    jal draw_row      
+    
+# Country 6: Mexico -> YELLOW
+    div $t7, $t7, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 52          # Row (y-coordinate)
+    li $a2, YELLOW        # Color  
+    move $a3, $t7
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 53          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 54          # Row (y-coordinate)
+    jal draw_row      
+
+    jr $ra
 
 lantus_4:
-    la $t1, lantus     # Load address of drug4_prices into $t1
-    jal draw_row        # Call subroutine to draw bar chart
-    j end_program
+#Country 1: US -> RED  
+    li $t8, 50
+    div $t2, $t2, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 7          # Row (y-coordinate)
+    li $a2, RED        # Color  
+    move $a3, $t2
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 8          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 9          # Row (y-coordinate)
+    jal draw_row
+    
+# Country 2: Canada -> GREEN
+    div $t3, $t3, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 16          # Row (y-coordinate)
+    li $a2, GREEN        # Color  
+    move $a3, $t3
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 17          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 18          # Row (y-coordinate)
+    jal draw_row    
+    
+# Country 3: Germany -> ORANGE
+    div $t4, $t4, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 25          # Row (y-coordinate)
+    li $a2, ORANGE        # Color  
+    move $a3, $t4
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 26          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 27          # Row (y-coordinate)
+    jal draw_row        
+    
+# Country 4: UK -> BLUE
+    div $t5, $t5, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 34          # Row (y-coordinate)
+    li $a2, BLUE        # Color  
+    move $a3, $t5
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 35          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 36          # Row (y-coordinate)
+    jal draw_row       
+    
+# Country 5: Brazil -> WHITE
+    div $t6, $t6, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 43          # Row (y-coordinate)
+    li $a2, WHITE        # Color  
+    move $a3, $t6
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 44          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 45          # Row (y-coordinate)
+    jal draw_row      
+    
+# Country 6: Mexico -> YELLOW
+    div $t7, $t7, $t8
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 52          # Row (y-coordinate)
+    li $a2, YELLOW        # Color  
+    move $a3, $t7
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 53          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 54          # Row (y-coordinate)
+    jal draw_row      
+
+    jr $ra
 
 prozac_5:
-    la $t1, prozac     # Load address of drug5_prices into $t1
-    jal draw_row        # Call subroutine to draw bar chart
-    j end_program
+#Country 1: US -> RED  
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 7          # Row (y-coordinate)
+    li $a2, RED        # Color  
+    move $a3, $t2
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 8          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 9          # Row (y-coordinate)
+    jal draw_row
+    
+# Country 2: Canada -> GREEN
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 16          # Row (y-coordinate)
+    li $a2, GREEN        # Color  
+    move $a3, $t3
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 17          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 18          # Row (y-coordinate)
+    jal draw_row    
+    
+# Country 3: Germany -> ORANGE
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 25          # Row (y-coordinate)
+    li $a2, ORANGE        # Color  
+    move $a3, $t4
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 26          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 27          # Row (y-coordinate)
+    jal draw_row        
+    
+# Country 4: UK -> BLUE
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 34          # Row (y-coordinate)
+    li $a2, BLUE        # Color  
+    move $a3, $t5
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 35          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 36          # Row (y-coordinate)
+    jal draw_row       
+    
+# Country 5: Brazil -> WHITE
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 43          # Row (y-coordinate)
+    li $a2, WHITE
+    move $a3, $t6
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 44          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 45          # Row (y-coordinate)
+    jal draw_row      
+    
+# Country 6: Mexico -> YELLOW
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 52          # Row (y-coordinate)
+    li $a2, YELLOW        # Color  
+    move $a3, $t7
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 53          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 54          # Row (y-coordinate)
+    jal draw_row      
+
+    jr $ra
 
 xanax_6:
-    la $t1, xanax     # Load address of drug6_prices into $t1
-    jal draw_row        # Call subroutine to draw bar chart
-    j end_program
+#Country 1: US -> RED  
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 7          # Row (y-coordinate)
+    li $a2, RED        # Color  
+    move $a3, $t2
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 8          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 9          # Row (y-coordinate)
+    jal draw_row
+    
+# Country 2: Canada -> GREEN
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 16          # Row (y-coordinate)
+    li $a2, GREEN        # Color  
+    move $a3, $t3
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 17          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 18          # Row (y-coordinate)
+    jal draw_row    
+    
+# Country 3: Germany -> ORANGE
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 25          # Row (y-coordinate)
+    li $a2, ORANGE        # Color  
+    move $a3, $t4
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 26          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 27          # Row (y-coordinate)
+    jal draw_row        
+    
+# Country 4: UK -> BLUE
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 34          # Row (y-coordinate)
+    li $a2, BLUE        # Color  
+    move $a3, $t5
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 35          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 36          # Row (y-coordinate)
+    jal draw_row       
+    
+# Country 5: Brazil -> WHITE
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 43          # Row (y-coordinate)
+    li $a2, WHITE        # Color  
+    move $a3, $t6
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 44          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 45          # Row (y-coordinate)
+    jal draw_row      
+    
+# Country 6: Mexico -> YELLOW
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 52          # Row (y-coordinate)
+    li $a2, YELLOW        # Color  
+    move $a3, $t7
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 53          # Row (y-coordinate)
+    jal draw_row
+    
+    li $a0, 0          # Start column (x-coordinate)
+    li $a1, 54          # Row (y-coordinate)
+    jal draw_row      
+
+    lw $ra, 0($fp)
+    jr $ra
 
 
 
@@ -153,9 +694,7 @@ invalid_input_handler:
     li $v0, 4                 # Syscall for print string
     la $a0, invalid_input     # Load address of invalid input message
     syscall                   # Print error message
-    j main                    # Restart the program
+    j graphics                    # Restart the program
 
-# Subroutine to end the program gracefully
-end_program:
-    li $v0, 10                # Syscall for exit
-    syscall                   # Exit the program
+
+
