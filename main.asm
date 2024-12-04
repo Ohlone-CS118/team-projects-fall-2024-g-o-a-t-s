@@ -17,9 +17,9 @@ beginning:
 	
 	jal prompt_user			# call prompt_user
 	
-	beq $t0, -1, shutdown		# branch if the user enters -1
-	
 	move $t0, $v0			# stash the user input in $t0
+	
+	beq $t0, -1, shutdown		# branch if the user enters -1
 	
 	jal readFile			# call readFile
 	
