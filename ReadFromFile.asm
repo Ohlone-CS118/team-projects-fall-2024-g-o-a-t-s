@@ -111,7 +111,7 @@ ending:
 #	The buffer address hold the file text
 read:
 
-	addi $sp, $sp, -4	`	# make room on the stack for 1 word
+	addi $sp, $sp, -4		# make room on the stack for 1 word
 	sw $ra, 0($sp)			# store the return address
 
 	move $s0, $a0			# stash the file path

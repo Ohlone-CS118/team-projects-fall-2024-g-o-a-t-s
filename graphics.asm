@@ -42,30 +42,13 @@ graphics:
     sw $ra, 0($sp)		# store return address
     move $fp, $sp		# set up frame pointer
 
-    # Step 2: Display the selection prompt
-    li $v0, 4                 # Syscall for print string
-    la $a0, select_prompt     # Load address of prompt string
-    syscall                   # Print prompt
-
-    # Step 3: Read user input (integer)
-    li $v0, 5                 # Syscall for read integer
-    syscall                   # Read integer input
-    
-    li $t0, 1		# min value
-    li $t1, 6		# max value
-    
-    # Step 4: Validate input (1-6)
-    blt $v0, $t0, invalid_input_handler # If input < 1, invalid
-    bgt $v0, $t1, invalid_input_handler # If input > 6, invalid
-
-
     # Step 5: Select the corresponding drug prices array
-    beq $v0, 1, viagra_1
-    beq $v0, 2, lipitor_2
-    beq $v0, 3, ventolin_3
-    beq $v0, 4, lantus_4
-    beq $v0, 5, prozac_5
-    beq $v0, 6, xanax_6
+    beq $t0, 1, viagra_1
+    beq $t0, 2, lipitor_2
+    beq $t0, 3, ventolin_3
+    beq $t0, 4, lantus_4
+    beq $t0, 5, prozac_5
+    beq $t0, 6, xanax_6
 
 # Subroutines for each drug
 viagra_1:
@@ -688,13 +671,5 @@ draw_row_loop:
     addiu $sp, $sp, 4          # Restore stack pointer
 
     jr $ra                     # Return to caller
-
-# Error Handler for Invalid Input
-invalid_input_handler:
-    li $v0, 4                 # Syscall for print string
-    la $a0, invalid_input     # Load address of invalid input message
-    syscall                   # Print error message
-    j graphics                    # Restart the program
-
 
 
