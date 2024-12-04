@@ -137,12 +137,12 @@ loop:
   addi $s1, $s1, 1     #increment array address
   j loop       #jump to start of loop
 FIN:
-	lw $t1, -24($sp)
-	lw $t2, -20($sp)
-	lw $t3, -16($sp)
-	lw $t4, -12($sp)
-	lw $t5, -8($sp)
-	lw $t6, -4($sp)
+	lw $t2, -24($sp)
+	lw $t3, -20($sp)
+	lw $t4, -16($sp)
+	lw $t5, -12($sp)
+	lw $t6, -8($sp)
+	lw $t7, -4($sp)
 	jr $ra
 oneDone:
   	#add $sp, $sp, $s7
