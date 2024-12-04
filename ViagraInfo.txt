@@ -1,7 +1,7 @@
 Here are the average prices per dose of the generic form of Viagra in these 6 countries:
-US: $1.90
-Canada: $4.67
-Germany: $3.24
-UK: $0.51
-Brazil: $1.28
-Mexico: $2.02
+US (Red): $1.90
+Canada (Green): $4.67
+Germany (Orange): $3.24
+UK (Blue): $0.51
+Brazil (White): $1.28
+Mexico (Yellow): $2.02
