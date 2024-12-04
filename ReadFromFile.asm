@@ -7,7 +7,6 @@ Lantus_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Lantus.txt"
 Prozac_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Prozac.txt"
 Xanax_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Xanax.txt"
 buffer:	   .space 200
-notGood:   .asciiz "that was not a digit"
 
 .text
 
