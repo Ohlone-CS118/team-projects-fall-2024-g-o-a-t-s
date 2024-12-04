@@ -2,6 +2,8 @@
 
 .globl playSound
 
+#preconditions: none
+#postcondition: a sound will have been played
 playSound:
 
 li $a2, 33	# load an instrument
@@ -161,8 +163,8 @@ syscall 	# do it
 
 
 
-li $v0, 31
-syscall
+li $v0, 31	# play midi sound
+syscall		# do it
 
-jr $ra
+jr $ra		# return
 
