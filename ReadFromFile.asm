@@ -156,14 +156,14 @@ convertToInt:
 	li $s3, 10			# store 10 in $s3
 	li $s2, 0			# store 0 in $s2
 loop:
-  lbu $s4, ($s1)       # load unsigned char from array into t1
+  lbu $s4, ($s1)       # load char from string into t1
   beq $s4, $s5, oneDone   # when the character read is the newline character branch to oneDone because we have reached the end of a number
-  beq $s4, $zero, FIN     # NULL terminator found
-  addi $s4, $s4, -48   # converts t1's ascii value to dec value
-  mul $s2, $s2, $s3    # sum *= 10
-  add $s2, $s2, $s4    # sum += array[s1]-'0'
-  addi $s1, $s1, 1     # increment array address
-  j loop       # jump to start of loop
+  beq $s4, $zero, FIN     # check for the terminating character
+  addi $s4, $s4, -48   # convert the ascii character to its integer value
+  mul $s2, $s2, $s3    # value = value * 10
+  add $s2, $s2, $s4    # value = value + converted_int
+  addi $s1, $s1, 1     # point to the next char in the string
+  j loop      	       # loop
 FIN:
 	lw $t2, -24($sp)		# store the numbers in registers for graphics to use
 	lw $t3, -20($sp)
