@@ -13,7 +13,7 @@ Lantus_Info_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/LantusInfo.txt"
 Prozac_Info_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/ProzacInfo.txt"
 Xanax_Info_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/XanaxInfo.txt"
 buffer:	   .space 200
-buffer2:   .space 200
+buffer2:   .space 400
 
 .text
 
@@ -128,7 +128,7 @@ read:
 	li $v0, 14			# read the file
 	move $a0, $s3			# set the file handler
 	move $a1, $s1			# set the buffer
-	li $a2, 199			# set the max length
+	li $a2, 399			# set the max length
 	syscall
 	
 	move $s4, $v0			# save the number of chars read
