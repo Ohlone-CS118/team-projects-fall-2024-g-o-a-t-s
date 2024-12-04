@@ -18,8 +18,6 @@ readFile:
 	addi $sp, $sp, -4
 	sw $ra, 0($sp)
 	move $fp, $sp
-	
-	li $t0, 1
 
 	beq $t0, 1, Viagra
 	beq $t0, 2, Lipitor
