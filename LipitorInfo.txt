@@ -1,0 +1,7 @@
+Here are the average prices per dose of the generic form of Lipitor in these 6 countries:
+US (Red): $0.36
+Canada (Green): $0.15
+Germany (Orange): $0.41
+UK (Blue): $0.09
+Brazil (White): $0.54
+Mexico (Yellow): $0.67

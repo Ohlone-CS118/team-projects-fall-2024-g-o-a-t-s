@@ -1,15 +1,17 @@
 .data
 
 	prompt: .asciiz "\nEnter 1 for Viagra\nEnter 2 for Lipitor\nEnter 3 for Ventolin\nEnter 4 for Lantus\nEnter 5 for Prozac\nEnter 6 for Xanax\nPrompt: "
-	error: .asciiz "\nPlease enter a number 1 - 6"
+	error: .asciiz "\nPlease enter a number 1 - 6 or -1 to quit"
 	
 .text
 
 .globl prompt_user
 
+#preconditions: none
+#postcondition: $v0 contains the integer read from the user
 prompt_user:
-	li $t0, 1		# min number
-	li $t1, 6		# max number
+	li $s0, -1		# min number
+	li $s1, 6		# max number
 
 	li $v0, 4		# prompt user input	
 	la $a0, prompt
@@ -18,10 +20,13 @@ prompt_user:
 	li $v0, 5		# read user input
 	syscall
 
-	blt $v0, $t0, error_message	# error message if input < 1
-	bgt $v0, $t1, error_message	# error message if input > 6
+	blt $v0, $s0, error_message	# error message if input < 1
+	bgt $v0, $s1, error_message	# error message if input > 6
+	
+	li $s0, 0		# reset $s0
+	li $s1, 0		# reset $s1
 
-	jr $ra
+	jr $ra			# return
 	
 error_message:
 	li $v0, 4		# print error message

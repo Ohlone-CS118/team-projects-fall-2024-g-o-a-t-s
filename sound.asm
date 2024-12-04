@@ -1,6 +1,9 @@
 .text
 
+.globl playSound
 
+#preconditions: none
+#postcondition: a sound will have been played
 playSound:
 
 li $a2, 33	# load an instrument
@@ -50,19 +53,19 @@ li $v0 31 	# play midi sound
 syscall 	# do it
 
 li $v0, 32	# sleep
-li $a0, 300	# for 300 miliseconds
+li $a0, 400	# for 400 miliseconds
 syscall
 
 
 
 li $a0, 61	# play C#    5)
-li $a1 400 	# play for 400 miliseconds
+li $a1 400 	# play for 500 miliseconds
 
 li $v0 31 	# play midi sound
 syscall 	# do it
 
 li $v0, 32	# sleep
-li $a0, 200	# for 200 miliseconds
+li $a0, 400	# for 200 miliseconds
 syscall
 
 
@@ -74,19 +77,19 @@ li $v0 31 	# play midi sound
 syscall 	# do it
 
 li $v0, 32	# sleep
-li $a0, 200	# for 200 miliseconds
+li $a0, 300	# for 200 miliseconds
 syscall
 
 
 
 li $a0, 62	# play D    7)
-li $a1 500 	# play for 500 miliseconds
+li $a1 400 	# play for 500 miliseconds
 
 li $v0 31 	# play midi sound
 syscall 	# do it
 
 li $v0, 32	# sleep
-li $a0, 300	# for 300 miliseconds
+li $a0, 400	# for 300 miliseconds
 syscall
 
 
@@ -98,7 +101,7 @@ li $v0 31 	# play midi sound
 syscall 	# do it
 
 li $v0, 32	# sleep
-li $a0, 300	# for 300 miliseconds
+li $a0, 400	# for 300 miliseconds
 syscall
 
 
@@ -140,7 +143,7 @@ syscall
 
 
 li $a0, 64	# play E    12)
-li $a1 400 	# play for 400 miliseconds
+li $a1 300 	# play for 400 miliseconds
 
 li $v0 31 	# play midi sound
 syscall 	# do it
@@ -160,8 +163,8 @@ syscall 	# do it
 
 
 
-li $v0, 31
-syscall
+li $v0, 31	# play midi sound
+syscall		# do it
 
-jr $ra
+jr $ra		# return
 

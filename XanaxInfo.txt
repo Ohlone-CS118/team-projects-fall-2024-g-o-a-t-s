@@ -1,0 +1,7 @@
+Here are the average prices per dose of the generic form of Xanax in these 6 countries:
+US (Red): $0.22
+Canada (Green): $0.16
+Germany (Orange): $0.35
+UK (Blue): $0.00
+Brazil (White): $0.15
+Mexico (Yellow): $0.60

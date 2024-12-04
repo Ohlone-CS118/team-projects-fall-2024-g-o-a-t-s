@@ -1,0 +1,7 @@
+Here are the average prices per dose of the generic form of Ventolin in these 6 countries:
+US (Red): $40.43
+Canada (Green): $3.43
+Germany (Orange): $13.98
+UK (Blue): $3.65
+Brazil (White): $1.87
+Mexico (Yellow): $6.04
