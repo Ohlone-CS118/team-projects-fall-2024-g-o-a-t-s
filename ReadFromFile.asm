@@ -6,7 +6,14 @@ Ventolin_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Ventolin.txt"
 Lantus_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Lantus.txt"
 Prozac_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Prozac.txt"
 Xanax_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Xanax.txt"
+Viagra_Info_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/ViagraInfo.txt"
+Lipitor_Info_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/LipitorInfo.txt"
+Ventolin_Info_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/VentolinInfo.txt"
+Lantus_Info_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/LantusInfo.txt"
+Prozac_Info_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/ProzacInfo.txt"
+Xanax_Info_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/XanaxInfo.txt"
 buffer:	   .space 200
+buffer2:   .space 200
 
 .text
 
@@ -29,36 +36,54 @@ Viagra:
 	la $a0, Viagra_Path		# set the path
 	la $a1, buffer			# set the buffer
 	jal read			# call readFile
+	la $a0, Viagra_Info_Path
+	la $a1, buffer2
+	jal read
 	j ending
 
 Lipitor:
 	la $a0, Lipitor_Path		# set the path
 	la $a1, buffer			# set the buffer
 	jal read			# call readFile
+	la $a0, Lipitor_Info_Path
+	la $a1, buffer2
+	jal read
 	j ending	
 	
 Ventolin:
 	la $a0, Ventolin_Path		# set the path
 	la $a1, buffer			# set the buffer
 	jal read			# call readFile
+	la $a0, Ventolin_Info_Path
+	la $a1, buffer2
+	jal read
 	j ending
 	
 Lantus:
 	la $a0, Lantus_Path		# set the path
 	la $a1, buffer			# set the buffer
 	jal read			# call readFile
+	la $a0, Lantus_Info_Path
+	la $a1, buffer2
+	jal read
 	j ending
 
 Prozac:
 	la $a0, Prozac_Path		# set the path
 	la $a1, buffer			# set the buffer
 	jal read			# call readFile
+	la $a0, Prozac_Info_Path
+	la $a1, buffer2
+	jal read
 	j ending
 	
 Xanax:
 	la $a0, Xanax_Path		# set the path
 	la $a1, buffer			# set the buffer
 	jal read			# call readFile
+	la $a0, Xanax_Info_Path
+	la $a1, buffer2
+	jal read
 	j ending	
 
 	
@@ -66,6 +91,10 @@ Xanax:
 ending:
 	la $a0, buffer
 	jal convertToInt
+	
+	li $v0, 4
+	la $a0, buffer2
+	syscall
 	
 	lw $ra, 0($fp)
 	jr $ra
