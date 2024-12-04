@@ -25,10 +25,6 @@ beginning:
 	jal playSound			# call playSound
 	
 	jal graphics			# call graphics
-	
-	jal prompt_user_loop		# call prompt_user_loop
-	
-	bne $v0, 2, beginning		# jump to beginning
 		
 shutdown:
 	li $v0, 10			# exit safely
