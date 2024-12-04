@@ -1,5 +1,6 @@
 .text
 
+.globl playSound
 
 playSound:
 
