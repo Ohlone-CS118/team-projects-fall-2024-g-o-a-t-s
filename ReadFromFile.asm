@@ -1,35 +1,74 @@
+.data
+
+Viagra_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Viagra.txt"
+Lipitor_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Lipitor.txt"
+Ventolin_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Ventolin.txt"
+Lantus_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Lantus.txt"
+Prozac_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Prozac.txt"
+Xanax_Path: .asciiz "team-projects-fall-2024-g-o-a-t-s/Xanax.txt"
+buffer:	   .space 200
+notGood:   .asciiz "that was not a digit"
+
+.text
+
 .globl readFile
-# preconditions:
-#	$a0 = file path
-#	$a1 = buffer
-# postcondition:
-#	The buffer address hold the file text
+
 readFile:
 
-	move $s0, $a0			# stash the file path
-	move $s1, $a1			# stash the buffer address
+	addi $sp, $sp, -4
+	sw $ra, 0($sp)
+	move $fp, $sp
 	
-	li $v0, 13			# open the file
-	move $a0, $s0			# set the file path
-	li $a1, 0
-	li $a2, 0
-	syscall
+	li $t0, 1
 
-	move $s3, $v0			# save the file handler
+	beq $t0, 1, Viagra
+	beq $t0, 2, Lipitor
+	beq $t0, 3, Ventolin
+	beq $t0, 4, Lantus
+	beq $t0, 5, Prozac
+	beq $t0, 6, Xanax
+
+Viagra:
+	la $a0, Viagra_Path		# set the path
+	la $a1, buffer			# set the buffer
+	jal read			# call readFile
+	j ending
+
+Lipitor:
+	la $a0, Lipitor_Path		# set the path
+	la $a1, buffer			# set the buffer
+	jal read			# call readFile
+	j ending	
 	
-	li $v0, 14			# read the file
-	move $a0, $s3			# set the file handler
-	move $a1, $s1			# set the buffer
-	li $a2, 199			# set the max length
-	syscall
+Ventolin:
+	la $a0, Ventolin_Path		# set the path
+	la $a1, buffer			# set the buffer
+	jal read			# call readFile
+	j ending
 	
-	move $s4, $v0			# save the number of chars read
+Lantus:
+	la $a0, Lantus_Path		# set the path
+	la $a1, buffer			# set the buffer
+	jal read			# call readFile
+	j ending
+
+Prozac:
+	la $a0, Prozac_Path		# set the path
+	la $a1, buffer			# set the buffer
+	jal read			# call readFile
+	j ending
 	
-	add $s5, $s4, $s1
-	sb $zero, 0($s5)		# insert the terminating null char (\0)
+Xanax:
+	la $a0, Xanax_Path		# set the path
+	la $a1, buffer			# set the buffer
+	jal read			# call readFile
+	j ending	
+
 	
-	li $v0, 16			# close the file
-	move $a0, $s3			# set the file handler
-	syscall
 	
+ending:
+	la $a0, buffer
+	jal convertToInt
+	
+	lw $ra, 0($fp)
 	jr $ra
