@@ -151,7 +151,8 @@ viagra_1:
     li $a1, 54          # Row (y-coordinate)
     jal draw_row      
 
-    jr $ra
+    lw $ra, 0($fp)	# restore the return address
+    jr $ra		# return
 
 lipitor_2:
 #Country 1: US -> RED  
@@ -244,7 +245,8 @@ lipitor_2:
     li $a1, 54          # Row (y-coordinate)
     jal draw_row      
 
-    jr $ra
+    lw $ra, 0($fp)	# restore the return address     
+    jr $ra		# return
 
 ventolin_3:
 # Country 1: US -> RED  
@@ -344,7 +346,8 @@ ventolin_3:
     li $a1, 54          # Row (y-coordinate)
     jal draw_row      
 
-    jr $ra
+    lw $ra, 0($fp)	# restore the return address     
+    jr $ra		# return
 
 lantus_4:
 #Country 1: US -> RED  
@@ -444,7 +447,8 @@ lantus_4:
     li $a1, 54          # Row (y-coordinate)
     jal draw_row      
 
-    jr $ra
+    lw $ra, 0($fp)	# restore the return address     
+    jr $ra		# return
 
 prozac_5:
 #Country 1: US -> RED  
@@ -537,7 +541,8 @@ prozac_5:
     li $a1, 54          # Row (y-coordinate)
     jal draw_row      
 
-    jr $ra
+    lw $ra, 0($fp)	# restore the return address     
+    jr $ra		# return
 
 xanax_6:
 #Country 1: US -> RED  
@@ -631,7 +636,8 @@ xanax_6:
     jal draw_row      
 
     lw $ra, 0($fp)
-    jr $ra
+    lw $ra, 0($fp)	# restore the return address     
+    jr $ra		# return
 
 
 
