@@ -152,12 +152,14 @@ convertToInt:
 	addi $sp, $sp, -24		# make room for 6 words on the stack
 	li $s7, 0			# incrementor starts at 0
 	li $s5, 13         		# store 13 in $s5 (the ascii value for carriage return is 13)
+	li $s6, 10			# store 10 in $s6 (the ascii value for newline is 10)
 	move $s1, $a0			# store the address of the string in $s1
 	li $s3, 10			# store 10 in $s3
 	li $s2, 0			# store 0 in $s2
 loop:
   lbu $s4, ($s1)       # load char from string into t1
-  beq $s4, $s5, oneDone   # when the character read is the newline character branch to oneDone because we have reached the end of a number
+  beq $s4, $s5, oneDone   # when the character read is the carriage return character branch to oneDone because we have reached the end of a number on windows or mac
+  beq $s4, $s6, oneDone   # when the character read is the newline character branch to oneDone because we have reached the end of a number on unix
   beq $s4, $zero, FIN     # check for the terminating character
   addi $s4, $s4, -48   # convert the ascii character to its integer value
   mul $s2, $s2, $s3    # value = value * 10
@@ -177,5 +179,10 @@ oneDone:
 	sw $s2, 0($sp)			# store the number on the stack
 	li $s2, 0			# reset $s2
 	addi $sp, $sp, 4		# move the stack pointer over by 1 word
-	addi $s1, $s1, 2     		# increment array address
+	addi $s1, $s1, 1     		# increment array address
+	lbu $s4, ($s1)			# load char from string into t1
+	beq $s4, $s6, windows		# on windows the next char after the carriage return is a newline
+	j loop				# jump to loop
+windows:
+	addi $s1, $s1, 1		# increment the array address again to get to the next number
 	j loop				# jump to loop

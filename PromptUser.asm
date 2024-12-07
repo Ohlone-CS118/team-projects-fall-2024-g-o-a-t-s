@@ -21,6 +21,7 @@ prompt_user:
 	syscall
 
 	blt $v0, $s0, error_message	# error message if input < 1
+	beq $v0, $zero, error_message	# error message if input = 0
 	bgt $v0, $s1, error_message	# error message if input > 6
 	
 	li $s0, 0		# reset $s0
